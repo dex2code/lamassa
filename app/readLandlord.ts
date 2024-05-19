@@ -1,8 +1,10 @@
 import * as dotenv from 'dotenv';
 import { getEnvVariable } from './utils';
-import { CHAIN_ID, Client, ClientFactory, DefaultProviderUrls, IAccount, IContractReadOperationResponse, IReadData, bytesToU64, bytesToStr, fromMAS } from '@massalabs/massa-web3';
+import { CHAIN_ID, Client, ClientFactory, DefaultProviderUrls, IAccount, IContractReadOperationResponse, IReadData, bytesToU64, bytesToStr, fromMAS, IProvider, ProviderType } from '@massalabs/massa-web3';
 
 dotenv.config();
+
+const rpcURL: string = getEnvVariable("JSON_RPC_URL_PUBLIC");
 
 const scAddress: string = getEnvVariable("SC_ADDRESS");
 
@@ -20,9 +22,16 @@ const ownerBaseAccount: IAccount = {
     secretKey: ownerSecretKey
 } as IAccount;
 
-const ownerClient: Client = await ClientFactory.createDefaultClient(
-    DefaultProviderUrls.BUILDNET,
-    CHAIN_ID.BuildNet,
+const customProvider: Array<IProvider> = [
+    {
+        url: rpcURL,
+        type: ProviderType.PUBLIC
+    } as IProvider
+];
+
+const ownerClient: Client = await ClientFactory.createCustomClient(
+    customProvider,
+    CHAIN_ID.MainNet,
     false,
     ownerBaseAccount
 );
@@ -30,7 +39,7 @@ const ownerClient: Client = await ClientFactory.createDefaultClient(
 
 const currentLandlordAddress: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
     {
-        maxGas: 3_000_000n,
+        maxGas: fromMAS(0.01),
         targetAddress: scAddress,
         targetFunction: "landlordAddress",
         parameter: [],

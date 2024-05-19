@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { getEnvVariable } from './utils';
-import { CHAIN_ID, Client, ClientFactory, DefaultProviderUrls, IAccount, IContractReadOperationResponse, IReadData, IProvider, ProviderType, fromMAS, bytesToU256 } from '@massalabs/massa-web3';
+import { CHAIN_ID, Client, ClientFactory, IAccount, IContractReadOperationResponse, IReadData, bytesToStr, fromMAS, IProvider, ProviderType } from '@massalabs/massa-web3';
 
 dotenv.config();
 
@@ -36,21 +36,12 @@ const ownerClient: Client = await ClientFactory.createCustomClient(
     ownerBaseAccount
 );
 
-const maxSupply: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
-    {
-        maxGas: fromMAS(0.01),
-        targetAddress: scAddress,
-        targetFunction: "maxSupply",
-        parameter: [],
-        callerAddress: ownerAddress
-    } as IReadData
-);
 
-const currentSupply: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
+const currentBaseURI: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
     {
         maxGas: fromMAS(0.01),
         targetAddress: scAddress,
-        targetFunction: "currentSupply",
+        targetFunction: "baseURI",
         parameter: [],
         callerAddress: ownerAddress
     } as IReadData
@@ -58,6 +49,5 @@ const currentSupply: IContractReadOperationResponse = await ownerClient.smartCon
 
 
 console.log(
-    "maxSupply: '" + bytesToU256(maxSupply.returnValue) + "'" + "\n" +
-    "currentSupply: '" + bytesToU256(currentSupply.returnValue) + "'"
+    "Current Base URI address: '" + bytesToStr(currentBaseURI.returnValue) + "'" + "\n"
 );

@@ -337,3 +337,23 @@ export function withdrawFunds(txArgues: StaticArray<u8> = []): void {
 
   generateEvent("Funds (nMAS) were successfully withdrawn to " + receiverAddress);
 }
+
+
+export function mintPrice(_: StaticArray<u8> = []): StaticArray<u8> {
+  return Storage.has(MINT_PRICE_KEY) ?
+      Storage.get(MINT_PRICE_KEY) : u64ToBytes(0);
+}
+
+export function setMintPrice(txArgues: StaticArray<u8> = []): void {
+  onlyOwner();
+
+  const arguesList: Args = new Args(txArgues);
+  const newMintPrice: u64 = arguesList.nextU64().expect("Wrong argues provided");
+
+  Storage.set(
+      MINT_PRICE_KEY,
+      u64ToBytes(newMintPrice)
+  );
+
+  generateEvent("The new mint price has been successfully set");
+}

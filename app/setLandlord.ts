@@ -1,8 +1,10 @@
 import * as dotenv from 'dotenv';
 import { getEnvVariable } from './utils';
-import { Args, CHAIN_ID, Client, ClientFactory, DefaultProviderUrls, IAccount, ICallData, fromMAS } from '@massalabs/massa-web3';
+import { Args, CHAIN_ID, Client, ClientFactory, IAccount, ICallData, fromMAS, IProvider, ProviderType } from '@massalabs/massa-web3';
 
 dotenv.config();
+
+const rpcURL: string = getEnvVariable("JSON_RPC_URL_PUBLIC");
 
 const scAddress: string = getEnvVariable("SC_ADDRESS");
 
@@ -26,13 +28,20 @@ console.log();
 const ownerBaseAccount: IAccount = {
     address: ownerAddress,
     publicKey: ownerPublicKey,
-    secretKey: ownerSecretKey
+    secretKey: ownerSecretKey,
 } as IAccount;
 
-const ownerClient: Client = await ClientFactory.createDefaultClient(
-    DefaultProviderUrls.BUILDNET,
-    CHAIN_ID.BuildNet,
-    false,
+const customProvider: Array<IProvider> = [
+    {
+        url: rpcURL,
+        type: ProviderType.PUBLIC
+    } as IProvider
+];
+
+const ownerClient: Client = await ClientFactory.createCustomClient(
+    customProvider,
+    CHAIN_ID.MainNet,
+    true,
     ownerBaseAccount
 );
 
