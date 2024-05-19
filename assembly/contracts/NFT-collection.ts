@@ -273,7 +273,6 @@ export function mint(binaryArgs: StaticArray<u8>): void {
       landlordFee
     );
   }
-
 }
 
 

@@ -10,7 +10,6 @@ import {
   MAX_GAS_DEPLOYMENT,
   CHAIN_ID,
 } from '@massalabs/massa-web3';
-import { u256 } from 'as-bignum/assembly';
 
 // Obtain the current file name and directory paths
 const __filename = fileURLToPath(import.meta.url);
