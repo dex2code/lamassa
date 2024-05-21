@@ -32,6 +32,6 @@ export async function getMaxSupply(): Promise<bigint> {
 
 
 console.log(
-    "maxSupply: '" + await getMaxSupply() + "'" + "\n" +
-    "currentSupply: '" + await getCurrentSupply() + "'\n"
+    " 👝 maxSupply: '" + await getMaxSupply() + "'" + "\n" +
+    " 🎒 currentSupply: '" + await getCurrentSupply() + "'\n"
 );

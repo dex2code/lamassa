@@ -20,8 +20,8 @@ async function getTokenOwner(tokenNumber: bigint): Promise<string> {
     return bytesToStr(tokenOwner.returnValue);
 }
 
-
-console.log("*** Now: " + new Date().toUTCString() + " ***\n");
+console.log(" 🕑 Now: " + new Date().toUTCString());
+console.log();
 
 
 const tokenStart = 0;       // START TOKEN
@@ -40,11 +40,14 @@ if (tokenFinish > currentSupply) {
     exit(1);
 }
 
-console.log("* Initial tokens participating in the lottery: '" + tokenStart + " ... " + tokenFinish + "'");
+console.log(" 🤼 Tokens participating in the lottery: [ " + tokenStart + " ... " + tokenFinish + " ]");
 for (let i = tokenStart; i <= tokenFinish; i++) tokenList.push(i);
 
 const winnerList: number[] = _.sampleSize(tokenList, winnersNumber);
-console.log("* Calculated list of winner numbers: " + winnerList);
+console.log();
+console.log();
+console.log("              🏆🏆🏆 Winners: " + winnerList + " 🏆🏆🏆");
+console.log();
 console.log();
 
 winnerList.forEach(async function (tokenNumber) {
@@ -52,12 +55,12 @@ winnerList.forEach(async function (tokenNumber) {
 
     if (!tokenOwner) {
         console.error(
-            "Token #" + tokenNumber + " does not have an owner!"
+            " 🎟  Token #" + tokenNumber + " does not have an owner!"
         );
         exit(1);
     }
 
-    console.log("Token #" + tokenNumber + " has an owner: '" + tokenOwner + "'");
+    console.log(" 🎟  Token #" + tokenNumber + " has an owner: '" + tokenOwner + "'");
     ownerList.push(tokenOwner);
 });
 
@@ -67,7 +70,5 @@ console.log();
 
 ownerList.forEach(async function (ownerAddress) {
     let op: string = await withdrawFunds(ownerAddress, rewardAmount);
-    console.log("Sent " + toMAS(rewardAmount) + " MAS to: '" + ownerAddress + "'\n -> Operation ID: '" + op + "'\n");
+    console.log(" 💸 Sent " + toMAS(rewardAmount) + " MAS to: '" + ownerAddress + "'\n  ✉  Operation ID: '" + op + "'\n");
 });
-
-console.log("\nCongrats to all winners!!! 🎉🎉🎉\n");
