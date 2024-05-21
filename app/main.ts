@@ -33,6 +33,5 @@ export const ownerClient: Client = await ClientFactory.createCustomClient(
 );
 
 console.log();
-console.log(" 👛 Using wallet: " + ownerAddress);
+//console.log(" 👛 Using wallet: " + ownerAddress);
 console.log(" 📋 Interacting to SC: " + scAddress);
-console.log();
