@@ -1,10 +1,10 @@
-import { IContractReadOperationResponse, IReadData, bytesToU64, bytesToStr, fromMAS } from '@massalabs/massa-web3';
+import { IContractReadOperationResponse, IReadData, bytesToU64, bytesToStr, MAX_GAS_CALL } from '@massalabs/massa-web3';
 import { ownerClient, ownerAddress, scAddress } from "./main";
 
 
 const currentLandlordAddress: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
     {
-        maxGas: fromMAS(0.01),
+        maxGas: MAX_GAS_CALL,
         targetAddress: scAddress,
         targetFunction: "landlordAddress",
         parameter: [],
@@ -14,7 +14,7 @@ const currentLandlordAddress: IContractReadOperationResponse = await ownerClient
 
 const currentLandlordFee: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
     {
-        maxGas: fromMAS(0.01),
+        maxGas: MAX_GAS_CALL,
         targetAddress: scAddress,
         targetFunction: "landlordFee",
         parameter: [],

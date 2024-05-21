@@ -1,11 +1,11 @@
-import { IContractReadOperationResponse, IReadData, fromMAS, bytesToU256 } from '@massalabs/massa-web3';
+import { IContractReadOperationResponse, IReadData, fromMAS, bytesToU256, MAX_GAS_CALL } from '@massalabs/massa-web3';
 import { scAddress, ownerAddress, ownerClient } from "./main"
 
 
 export async function getCurrentSupply(): Promise<bigint> {    
     const currentSupply: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
         {
-            maxGas: fromMAS(0.01),
+            maxGas: MAX_GAS_CALL,
             targetAddress: scAddress,
             targetFunction: "currentSupply",
             parameter: [],
@@ -19,7 +19,7 @@ export async function getCurrentSupply(): Promise<bigint> {
 export async function getMaxSupply(): Promise<bigint> {    
     const maxSupply: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
         {
-            maxGas: fromMAS(0.01),
+            maxGas: MAX_GAS_CALL,
             targetAddress: scAddress,
             targetFunction: "maxSupply",
             parameter: [],
@@ -33,5 +33,5 @@ export async function getMaxSupply(): Promise<bigint> {
 
 console.log(
     "maxSupply: '" + await getMaxSupply() + "'" + "\n" +
-    "currentSupply: '" + await getCurrentSupply() + "'"
+    "currentSupply: '" + await getCurrentSupply() + "'\n"
 );

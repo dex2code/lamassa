@@ -1,9 +1,9 @@
-import { IContractReadOperationResponse, IReadData, bytesToStr, fromMAS } from '@massalabs/massa-web3';
+import { IContractReadOperationResponse, IReadData, bytesToStr, MAX_GAS_CALL } from '@massalabs/massa-web3';
 import { ownerClient, ownerAddress, scAddress } from "./main";
 
 const currentBaseURI: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
     {
-        maxGas: fromMAS(0.01),
+        maxGas: MAX_GAS_CALL,
         targetAddress: scAddress,
         targetFunction: "baseURI",
         parameter: [],

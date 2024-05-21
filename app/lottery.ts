@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Args, IReadData, IContractReadOperationResponse, fromMAS, toMAS, bytesToStr } from '@massalabs/massa-web3';
+import { Args, IReadData, IContractReadOperationResponse, fromMAS, toMAS, bytesToStr, MAX_GAS_CALL } from '@massalabs/massa-web3';
 import { ownerAddress, ownerClient, scAddress } from "./main";
 import { withdrawFunds } from "./withdraw";
 import { getCurrentSupply } from "./supply";
@@ -9,7 +9,7 @@ import { exit } from 'process';
 async function getTokenOwner(tokenNumber: bigint): Promise<string> {
     const tokenOwner: IContractReadOperationResponse = await ownerClient.smartContracts().readSmartContract(
         {
-            maxGas: fromMAS(0.01),
+            maxGas: MAX_GAS_CALL,
             targetAddress: scAddress,
             targetFunction: "ownerOf",
             parameter: new Args().addU256(tokenNumber).serialize(),
@@ -21,12 +21,12 @@ async function getTokenOwner(tokenNumber: bigint): Promise<string> {
 }
 
 
-console.log("\n*** Now: " + new Date().toUTCString() + " ***\n");
+console.log("*** Now: " + new Date().toUTCString() + " ***\n");
 
 
-const tokenStart = 1;       // START TOKEN
-const tokenFinish = 100;    // FINISH TOKEN
-const winnersNumber = 10;   // WINNERS NUMBER
+const tokenStart = 0;       // START TOKEN
+const tokenFinish = 0;    // FINISH TOKEN
+const winnersNumber = 0;   // WINNERS NUMBER
 
 const rewardAmount: bigint = fromMAS(150);
 
@@ -57,19 +57,17 @@ winnerList.forEach(async function (tokenNumber) {
         exit(1);
     }
 
-    console.log("Token #" + tokenNumber + " has an owner '" + tokenOwner + "'");
+    console.log("Token #" + tokenNumber + " has an owner: '" + tokenOwner + "'");
     ownerList.push(tokenOwner);
 });
 
 while (ownerList.length < winnersNumber) await new Promise(f => setTimeout(f, 1000));
 
-console.log("\n* Final list of winner addresses:");
-console.log(ownerList);
 console.log();
 
 ownerList.forEach(async function (ownerAddress) {
     let op: string = await withdrawFunds(ownerAddress, rewardAmount);
-    console.log("Sent " + toMAS(rewardAmount) + " MAS to address: '" + ownerAddress + "' with operation: '" + op + "'");
+    console.log("Sent " + toMAS(rewardAmount) + " MAS to: '" + ownerAddress + "'\n -> Operation ID: '" + op + "'\n");
 });
 
 console.log("\nCongrats to all winners!!! 🎉🎉🎉\n");

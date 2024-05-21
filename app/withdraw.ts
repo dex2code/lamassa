@@ -1,13 +1,11 @@
-import { Args, ICallData, fromMAS } from '@massalabs/massa-web3';
-import { ownerAddress, ownerClient, scAddress } from "./main";
+import { Args, ICallData, MAX_GAS_CALL, fromMAS } from '@massalabs/massa-web3';
+import { ownerClient, scAddress } from "./main";
 
 export async function withdrawFunds(to: string, q: bigint): Promise<string> {
-    console.log("Withdrawing " + q + "MAS to '" + to + "' address...");
-
     const withdrawOP: string = await ownerClient.smartContracts().callSmartContract(
         {
             fee: fromMAS(0.01),
-            maxGas: fromMAS(0.01),
+            maxGas: MAX_GAS_CALL,
             coins: fromMAS(0),
             targetAddress: scAddress,
             functionName: "withdrawFunds",
@@ -17,6 +15,3 @@ export async function withdrawFunds(to: string, q: bigint): Promise<string> {
     
     return withdrawOP.toString();
 }
-
-const op: string = await withdrawFunds(ownerAddress, fromMAS(11));
-console.log(op);
