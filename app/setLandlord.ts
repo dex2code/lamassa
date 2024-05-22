@@ -1,5 +1,5 @@
 import { getEnvVariable } from "./utils";
-import { Args, ICallData, fromMAS } from '@massalabs/massa-web3';
+import { Args, ICallData, MAX_GAS_CALL, fromMAS } from '@massalabs/massa-web3';
 import { ownerClient, scAddress } from "./main";
 
 const landlordAddress: string = getEnvVariable("LANDLORD_ADDRESS");
@@ -9,8 +9,8 @@ const landlordFee: bigint = BigInt(
 
 const setLandlordAddressOP: string = await ownerClient.smartContracts().callSmartContract(
     {
-        fee: fromMAS(0.01),
-        maxGas: fromMAS(0.01),
+        fee: fromMAS(0.1),
+        maxGas: MAX_GAS_CALL,
         coins: fromMAS(0),
         targetAddress: scAddress,
         functionName: "setLandlordAddress",
@@ -20,8 +20,8 @@ const setLandlordAddressOP: string = await ownerClient.smartContracts().callSmar
 
 const setLandlordFeeOP: string = await ownerClient.smartContracts().callSmartContract(
     {
-        fee: fromMAS(0.01),
-        maxGas: fromMAS(0.01),
+        fee: fromMAS(0.1),
+        maxGas: MAX_GAS_CALL,
         coins: fromMAS(0),
         targetAddress: scAddress,
         functionName: "setLandlordFee",
