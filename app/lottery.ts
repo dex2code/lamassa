@@ -44,32 +44,40 @@ console.log(" 🤼 Tokens participating in the lottery: [ " + tokenStart + " ...
 for (let i = tokenStart; i <= tokenFinish; i++) tokenList.push(i);
 
 const winnerList: number[] = _.sampleSize(tokenList, winnersNumber);
-console.log();
-console.log();
-console.log("          🏆 🏆 🏆  Winners: " + winnerList + " 🏆 🏆 🏆");
-console.log();
-console.log();
 
-winnerList.forEach(async function (tokenNumber) {
-    let tokenOwner = await getTokenOwner(BigInt(tokenNumber));
+if (winnerList.length) {
 
-    if (!tokenOwner) {
-        console.error(
-            " 🎟  NFT #" + tokenNumber + " does not have an owner!"
-        );
-        exit(1);
-    }
+    console.log();
+    console.log();
+    console.log("          🏆 🏆 🏆  Winners: " + winnerList + " 🏆 🏆 🏆");
+    console.log();
+    console.log();
 
-    console.log(" 🎟  NFT #" + tokenNumber + " owned by: '" + tokenOwner + "'");
-    ownerList.push(tokenOwner);
-});
+    winnerList.forEach(async function (tokenNumber) {
+        let tokenOwner = await getTokenOwner(BigInt(tokenNumber));
+    
+        if (!tokenOwner) {
+            console.error(
+                " 🎟  NFT #" + tokenNumber + " does not have an owner!"
+            );
+            exit(1);
+        }
+    
+        console.log(" 🎟  NFT #" + tokenNumber + " owned by: '" + tokenOwner + "'");
+        ownerList.push(tokenOwner);
+    });
 
-while (ownerList.length < winnersNumber) await new Promise(f => setTimeout(f, 1000));
+    while (ownerList.length < winnersNumber) await new Promise(f => setTimeout(f, 1000));
 
-console.log();
+    console.log();
+    
+    ownerList.forEach(async function (ownerAddress) {
+        //let op: string = "010101010101010101010101010101010101";
+        let op: string = await withdrawFunds(ownerAddress, rewardAmount);
+        console.log(" 💸 Sent " + toMAS(rewardAmount) + " MAS to: '" + ownerAddress + "'\n 🆔 Operation: '" + op + "'\n");
+    });
+} else {
+    console.log();
+}
 
-ownerList.forEach(async function (ownerAddress) {
-    //let op: string = "010101010101010101010101010101010101";
-    let op: string = await withdrawFunds(ownerAddress, rewardAmount);
-    console.log(" 💸 Sent " + toMAS(rewardAmount) + " MAS to: '" + ownerAddress + "'\n 🆔 Operation: '" + op + "'\n");
-});
+
