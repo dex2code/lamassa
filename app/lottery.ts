@@ -60,19 +60,18 @@ if (tokenFinish > currentSupply) {
   exit(1);
 }
 
-
 localConsole.log("  🤼  Tokens participating in this round: [ " + tokenStart + " ... " + tokenFinish + " ]");
-for (let i = tokenStart; i <= tokenFinish; i++) {
-  tokenList.push(i);
-}
+for (let i = tokenStart; i <= tokenFinish; i++) tokenList.push(i);
 
 const winnerList: number[] = _.sampleSize(tokenList, winnersNumber).sort();
 
 localConsole.log();
+localConsole.log();
+localConsole.log("                      🏆  🏆  🏆    WINNERS   🏆  🏆  🏆");
 localConsole.log("         ┌─────────────────────────────────────────────────────────────┐");
-localConsole.log("         │                        Winners:                             │");
 localConsole.log("         │                                                             │");
 localConsole.log("         │  " + winnerList.toString().replaceAll(',', ' ◦ ')    +   "  │");
+localConsole.log("         │                                                             │");
 localConsole.log("         └─────────────────────────────────────────────────────────────┘");
 localConsole.log();
 
@@ -80,19 +79,21 @@ if (winnerList.length) {
 
   winnerList.forEach(async function (tokenNumber) {
     await new Promise(f => setTimeout(f, 1_000));
+
     let tokenOwner = await getTokenOwner(BigInt(tokenNumber));
+
     if (!tokenOwner) {
       localConsole.error(" 🎟  NFT #" + tokenNumber + " does not have an owner!");
       exit(1);
+    } else {
+      localConsole.log(" 🎟   NFT #" + tokenNumber + " owned by:\t" + tokenOwner);
+      ownerList.push(tokenOwner);  
     }
-    
-    localConsole.log(" 🎟   NFT #" + tokenNumber + " owned by:\t" + tokenOwner);
-    ownerList.push(tokenOwner);
   });
-  
+
   while (ownerList.length < winnersNumber) await new Promise(f => setTimeout(f, 1000));
-  
-  
+  localConsole.log();
+
   ownerList.forEach(async function (ownerAddress) {
     await new Promise(f => setTimeout(f, 1_000));
     let op = "";
@@ -108,6 +109,3 @@ if (winnerList.length) {
   });
 
 }
-
-localConsole.log();
-localConsole.log();

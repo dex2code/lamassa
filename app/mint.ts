@@ -1,6 +1,13 @@
 import * as dotenv from 'dotenv';
 import { getEnvVariable } from './utils';
-import { Args, CHAIN_ID, Client, ClientFactory, DefaultProviderUrls, IAccount, ICallData, fromMAS } from '@massalabs/massa-web3';
+import {
+  Args, CHAIN_ID, Client,
+  ClientFactory, DefaultProviderUrls,
+  IAccount, ICallData, fromMAS
+} from '@massalabs/massa-web3';
+
+import { Console } from "console";
+const localConsole = new Console(process.stdout, process.stderr);
 
 dotenv.config();
 
@@ -13,37 +20,36 @@ const walletSecretKey: string = getEnvVariable("TEST01_SECRET_KEY");
 const mintPrice: bigint = fromMAS(30);
 
 
-console.log("Interacting to SC: '" + scAddress + "'");
-console.log("Using wallet: '" + walletAddress + "'");
-console.log("Mint price: '" + mintPrice + "'");
+localConsole.log("Interacting to SC: '" + scAddress + "'");
+localConsole.log("Using wallet: '" + walletAddress + "'");
+localConsole.log("Mint price: '" + mintPrice + "'");
 
 
 const ownerBaseAccount: IAccount = {
-    address: walletAddress,
-    publicKey: walletPublicKey,
-    secretKey: walletSecretKey
+  address: walletAddress,
+  publicKey: walletPublicKey,
+  secretKey: walletSecretKey
 } as IAccount;
 
 const ownerClient: Client = await ClientFactory.createDefaultClient(
-    DefaultProviderUrls.BUILDNET,
-    CHAIN_ID.BuildNet,
-    false,
-    ownerBaseAccount
+  DefaultProviderUrls.BUILDNET,
+  CHAIN_ID.BuildNet,
+  false,
+  ownerBaseAccount
 );
 
 
 const mintOP: string = await ownerClient.smartContracts().callSmartContract(
-    {
-        fee: fromMAS(0.01),
-        maxGas: fromMAS(0.01),
-        coins: mintPrice,
-        targetAddress: scAddress,
-        functionName: "mint",
-        parameter: new Args().addString(walletAddress).serialize()
-    } as ICallData,
-);
+  {
+    fee: fromMAS(0.01),
+    maxGas: fromMAS(0.01),
+    coins: mintPrice,
+    targetAddress: scAddress,
+    functionName: "mint",
+    parameter: new Args().addString(walletAddress).serialize()
+  } as ICallData );
 
 
-console.log(
-    "mintOP: '" + mintOP.toString() + "'"
+localConsole.log(
+  "mintOP: '" + mintOP.toString() + "'"
 );
