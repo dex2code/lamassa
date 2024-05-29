@@ -13,25 +13,20 @@ const ownerPublicKey: string = getEnvVariable("WALLET_PUBLIC_KEY");
 const ownerSecretKey: string = getEnvVariable("WALLET_SECRET_KEY");
 
 const ownerBaseAccount: IAccount = {
-    address: ownerAddress,
-    publicKey: ownerPublicKey,
-    secretKey: ownerSecretKey
+  address: ownerAddress,
+  publicKey: ownerPublicKey,
+  secretKey: ownerSecretKey
 } as IAccount;
 
 const customProvider: Array<IProvider> = [
-    {
-        url: rpcURL,
-        type: ProviderType.PUBLIC
-    } as IProvider
-];
+  {
+    url: rpcURL,
+    type: ProviderType.PUBLIC
+  } as IProvider ];
 
 export const ownerClient: Client = await ClientFactory.createCustomClient(
-    customProvider,
-    CHAIN_ID.MainNet,
-    false,
-    ownerBaseAccount
+  customProvider,
+  CHAIN_ID.MainNet,
+  false,
+  ownerBaseAccount
 );
-
-console.log();
-//console.log(" 👛 Using wallet: " + ownerAddress);
-console.log(" 📋 Interacting to SC: " + scAddress);

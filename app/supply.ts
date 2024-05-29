@@ -32,5 +32,5 @@ export async function getMaxSupply(): Promise<bigint> {
 
 
 //console.log(" 👝 Total Supply: " + await getMaxSupply());
-console.log(" 🎒 Current Supply: " + await getCurrentSupply());
-console.log();
+//console.log(" 🎒 Current Supply: " + await getCurrentSupply());
+//console.log();
