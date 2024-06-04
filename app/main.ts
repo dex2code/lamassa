@@ -27,6 +27,6 @@ const customProvider: Array<IProvider> = [
 export const ownerClient: Client = await ClientFactory.createCustomClient(
   customProvider,
   CHAIN_ID.MainNet,
-  false,
+  true,
   ownerBaseAccount
 );

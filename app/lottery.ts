@@ -13,12 +13,11 @@ import { exit } from 'process';
 import { Console } from "console";
 const localConsole = new Console(process.stdout, process.stderr);
 
-const debugMode = true;
 
-const tokenStart    = 101;            // START TOKEN
-const tokenFinish   = 150;            // FINISH TOKEN
-const winnersNumber = 10;             // WINNERS NUMBER
-const rewardAmount  = fromMAS(0);     // REWARD AMOUNT
+const tokenStart    = 101;
+const tokenFinish   = 200;
+const winnersNumber = 10;
+const rewardAmount  = fromMAS(0);
 
 
 let tokenList: number[] = [];
@@ -52,7 +51,7 @@ localConsole.log();
 const currentSupply = await getCurrentSupply();
 if (tokenFinish > currentSupply) {
   localConsole.error(
-    " ⚠  Current supply ("
+    "  ⚠   Current supply ("
     + currentSupply
     + ") is less than 'tokenFinish' ("
     + tokenFinish
@@ -75,37 +74,30 @@ localConsole.log("         │                                                  
 localConsole.log("         └─────────────────────────────────────────────────────────────┘");
 localConsole.log();
 
-if (winnerList.length) {
 
-  winnerList.forEach(async function (tokenNumber) {
-    await new Promise(f => setTimeout(f, 1_000));
-
+for (let tokenNumber of winnerList) {
+  try {
     let tokenOwner = await getTokenOwner(BigInt(tokenNumber));
+    localConsole.log(" 🎟   NFT #" + tokenNumber + " owned by:\t" + tokenOwner);
+    ownerList.push(tokenOwner);  
+  } catch (err) {
+    localConsole.error(" 🎟  NFT #" + tokenNumber + " does not have an owner!");
+    exit(1);
+  }
+}
 
-    if (!tokenOwner) {
-      localConsole.error(" 🎟  NFT #" + tokenNumber + " does not have an owner!");
-      exit(1);
-    } else {
-      localConsole.log(" 🎟   NFT #" + tokenNumber + " owned by:\t" + tokenOwner);
-      ownerList.push(tokenOwner);  
-    }
-  });
+localConsole.log();
 
-  while (ownerList.length < winnersNumber) await new Promise(f => setTimeout(f, 1000));
-  localConsole.log();
-
-  ownerList.forEach(async function (ownerAddress) {
-    await new Promise(f => setTimeout(f, 1_000));
-    let op = "";
-
-    (debugMode) ?
-      op = "AU12M3bAjCQWyBze2jDvnGPTx3JgSSy6uj3xZoxEHmE1a5tGzfbBD" :
-      op = await withdrawFunds(ownerAddress, rewardAmount);
-
-    localConsole.log(
-      " 💸  Sent " + toMAS(rewardAmount) + "MAS to: " + ownerAddress + 
-      "\n     Operation ID: " + op + "\n"
-    );
-  });
-
+for (let ownerAddress of ownerList) {
+  try {
+    let bounce = BigInt(Math.floor(Math.random() * 1_000));
+    let finalReward = rewardAmount + bounce;
+    let opNumber = await withdrawFunds(ownerAddress, finalReward);
+    localConsole.log(" 💸  Sent " + toMAS(rewardAmount) + "MAS to: " + ownerAddress); 
+    localConsole.log("     Operation ID: " + opNumber);
+    localConsole.log();
+  } catch (err) {
+    localConsole.error("Cannot send operation (" + err + ")");
+    exit(1);
+  }
 }
