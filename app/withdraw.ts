@@ -1,4 +1,4 @@
-import { Args, ICallData, MAX_GAS_CALL, fromMAS } from '@massalabs/massa-web3';
+import { Args, EOperationStatus, ICallData, MAX_GAS_CALL, fromMAS } from '@massalabs/massa-web3';
 import { ownerClient, scAddress } from "./main";
 
 export async function withdrawFunds(to: string, q: bigint): Promise<string> {
@@ -11,6 +11,11 @@ export async function withdrawFunds(to: string, q: bigint): Promise<string> {
       functionName: "withdrawFunds",
       parameter: new Args().addString(to).addU64(q).serialize()
     } as ICallData );
-    
+
+  await ownerClient.smartContracts().awaitRequiredOperationStatus(
+    withdrawOP,
+    EOperationStatus.SPECULATIVE_SUCCESS
+  );
+
   return withdrawOP.toString();
 }

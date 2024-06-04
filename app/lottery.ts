@@ -92,8 +92,8 @@ for (let ownerAddress of ownerList) {
   try {
     let bounce = BigInt(Math.floor(Math.random() * 1_000));
     let finalReward = rewardAmount + bounce;
-    let opNumber = await withdrawFunds(ownerAddress, finalReward);
     localConsole.log(" 💸  Sent " + toMAS(rewardAmount) + "MAS to: " + ownerAddress); 
+    let opNumber = await withdrawFunds(ownerAddress, finalReward);
     localConsole.log("     Operation ID: " + opNumber);
     localConsole.log();
   } catch (err) {
