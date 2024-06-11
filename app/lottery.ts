@@ -14,10 +14,10 @@ import { Console } from "console";
 const localConsole = new Console(process.stdout, process.stderr);
 
 
-const tokenStart    = 101;
-const tokenFinish   = 200;
+const tokenStart    = 201;
+const tokenFinish   = 300;
 const winnersNumber = 10;
-const rewardAmount  = fromMAS(0);
+const rewardAmount  = fromMAS(150);
 
 
 let tokenList: number[] = [];
@@ -42,6 +42,8 @@ localConsole.log();
 localConsole.log();
 localConsole.log("                 🌟 🌟 🌟   LAMAssa NFT GRAND LOTTERY 🌟 🌟 🌟");
 localConsole.log("                ─────────────────────────────────────────────────");
+localConsole.log("                                🏁   ROUND 3 🏁  ");
+localConsole.log();
 localConsole.log();
 localConsole.log("  🕑  Now: " + new Date().toUTCString());
 localConsole.log("  📋  Interacting to SC: " + scAddress);
